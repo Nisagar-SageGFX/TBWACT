@@ -1,0 +1,41 @@
+# TBWACT — Apache / Hostinger config for a single-page React build.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # Serve real files and folders as-is
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else goes to the SPA so /about, /board-of-trustees etc. work on refresh
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType video/mp4 "access plus 6 months"
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+ErrorDocument 404 /index.html
