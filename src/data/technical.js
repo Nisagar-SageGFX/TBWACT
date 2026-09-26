@@ -4,8 +4,9 @@
 // programs.js — the programme itself, with its full list and its "Planned"
 // status, still lives on /programs. Nothing here claims completed work.
 //
-// `alt` was written from each topic and filename, not from looking at the
-// photographs. Check it describes the actual image before launch.
+// `alt` describes what each image visibly shows. Three are stock illustrations
+// or renders rather than photographs of TBWACT's own work, and the alt says so
+// by describing them as illustrations — do not reword it to imply otherwise.
 // `focus` maps to object-position for a photo whose subject sits off-centre in
 // the 4:3 card frame.
 
@@ -16,7 +17,7 @@ export const technicalTopics = [
     description:
       'Seminars and awareness programmes that strengthen knowledge among construction professionals.',
     image: '/assets/technical/technical-knowledge.jpg',
-    alt: 'A technical awareness seminar for construction professionals',
+    alt: 'Illustration of three people working around a large head with a circuit-board brain, surrounded by gears and charts',
     focus: ''
   },
   {
@@ -24,8 +25,8 @@ export const technicalTopics = [
     title: 'Modern Construction Technologies',
     description:
       'Exploring modern construction technologies, digital construction management and evolving industry practices.',
-    image: '/assets/technical/modern-construction-technologies.png',
-    alt: 'Modern construction technology and digital construction management',
+    image: '/assets/technical/modern-construction-technologies.jpg',
+    alt: 'An engineer in a hard hat and high-visibility vest using a laptop, with digital engineering diagrams overlaid on the scene',
     focus: ''
   },
   {
@@ -33,8 +34,8 @@ export const technicalTopics = [
     title: 'Sustainable & Safe Construction',
     description:
       'Focus on green building concepts, sustainable development and construction safety standards.',
-    image: '/assets/technical/sustainable-safe-construction.png',
-    alt: 'Green building and construction site safety practices',
+    image: '/assets/technical/sustainable-safe-construction.jpg',
+    alt: 'Miniature tower crane and trees on a model construction site, with tall buildings blurred behind',
     focus: ''
   },
   {
@@ -43,7 +44,7 @@ export const technicalTopics = [
     description:
       'Keeping builders, engineers, architects, developers and contractors updated on regulatory requirements and industry standards.',
     image: '/assets/technical/industry-standards.jpg',
-    alt: 'Reviewing construction industry standards and regulatory requirements',
+    alt: 'A smiling engineer in a hard hat holding rolled construction drawings beside large glass windows',
     focus: ''
   }
 ];

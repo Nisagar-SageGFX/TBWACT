@@ -16,9 +16,32 @@ npm run preview
 
 ## Deployment (Hostinger / Apache)
 
+> **Turn on SSL for the domain in Hostinger *before* uploading.** The `.htaccess` redirects
+> every visitor to `https://`; with no certificate active the whole site becomes
+> unreachable. (At the time of the last audit the domain was still a Hostinger parked page
+> with no certificate, and its `robots.txt` read `Disallow: /`.)
+
 Upload the **contents** of `dist/` to `public_html/`, including the `.htaccess` that ships
-in `public/`. It handles three things: HTTPS redirect, SPA fallback so `/about` and
-`/board-of-trustees` survive a hard refresh, and cache headers for assets.
+in `public/`. It handles: the HTTPS redirect, SPA routing so `/about` and
+`/board-of-trustees` survive a hard refresh, **a genuine HTTP 404 for unknown URLs**,
+cache headers, and the security headers (HSTS, CSP, `nosniff`, referrer policy, frame
+protection).
+
+**Keep two lists in step.** The route whitelist in `.htaccess` must match `src/App.jsx`. A
+route missing from the whitelist still displays for visitors, but is answered with a 404
+status, so search engines will not index it. The Content-Security-Policy names every
+third party the site loads (Google Fonts, YouTube, Google Maps); a new embed or analytics
+tag is silently blocked by the browser until it is added there.
+
+**Verify on the live server** — this could only be tested against an emulation of the
+rules, never against Apache itself:
+
+```bash
+curl -sI https://www.tbwctrust.com/this-page-does-not-exist | head -1   # expect: 404
+curl -sI https://www.tbwctrust.com/about | head -1                      # expect: 200
+curl -sI https://www.tbwctrust.com/ | grep -i "strict-transport\|content-security"
+curl -s  https://www.tbwctrust.com/robots.txt                           # expect: Allow: /
+```
 
 If the site is served from a subdirectory, set `base` in `vite.config.js` and `RewriteBase`
 in `.htaccess` to match.
@@ -155,9 +178,16 @@ aloud, so all three need replacing before launch.
 
 The brief fixed the palette, so the distinctiveness had to come from elsewhere.
 
-**Colour** — `#F07D00` carries every action: buttons, active nav, list markers, the rule
-beside each section heading. `#016076` carries institutional weight: banners, footers,
-headings, card spines. They never compete for the same job.
+**Colour** — orange carries every action, teal carries institutional weight: banners,
+footers, headings, card spines. They never compete for the same job.
+
+The orange is split by contrast, not taste. `#F07D00` is the brand colour but reaches only
+2.75:1 on white, so it is limited to decoration (list markers, rules, card spines) and to
+dark ground. Anything that carries a label — button fills, orange text, the active-nav
+underline — uses `--orange-dark` `#A85400` (5.34:1 on white, 4.82:1 on the warm tint), with
+`--orange-darker` for hover. Focus rings use `--focus`: teal-deep on light surfaces, brand
+orange inside the dark bands. A measured audit of 637 text elements found no failures
+other than the decorative `/` in breadcrumbs.
 
 **Type** — Archivo for structure (headings, nav, buttons, lists) and Source Serif 4 for
 narrative paragraphs. A trust website has two voices — an institution stating facts and a
@@ -178,9 +208,21 @@ respected globally.
 
 - Skip link, visible focus rings, semantic landmarks, one `h1` per page
 - About dropdown works on hover, click, and keyboard (Enter opens, Tab moves through,
-  Escape closes); mobile uses tap only, no hover dependency
-- Every image has descriptive alt text; decorative images use `alt=""`
-- Lightbox traps Escape and restores scroll
+  Escape closes and returns focus to the trigger). It is a disclosure, not an ARIA menu:
+  no `role="menu"`, because arrow-key traversal is not implemented. The mobile menu also
+  closes on Escape
+- Every image has alt text; decorative images use `alt=""`. **None of the images on the
+  `/our-vision` cards, the `/news-events` impact cards or the home technical cards shows the
+  trust's own work — they are stock illustrations, a 3D render and stock photos. Their alt
+  text says what is actually pictured; do not reword it to imply otherwise.** Only the
+  five `f-*` gallery photos are of real events, and their alt text describes what is
+  visible without naming the occasion
+- Lightbox traps Tab inside the dialog, closes on Escape, restores scroll and returns
+  focus to the thumbnail that opened it
+- After a client-side route change, focus moves to `<main>`; hash links are left alone
+- Form errors are announced (`role="alert"`) and required fields are marked
+- `scroll-padding-top` keeps hash targets and keyboard focus clear of the sticky header
+- Footer headings are `<h2>`, so no page skips a heading level
 - WebP with JPEG fallback via `<Picture>`; everything below the fold lazy-loads
 - Video loads a poster image only — the iframe or MP4 is fetched on click, never before
 - The `/news-events` testimonial (`TestimonialVideo.jsx`) starts from an
@@ -193,7 +235,9 @@ respected globally.
 - That section has a play/pause control as well as mute/unmute. Auto-starting content
   longer than five seconds needs a pause mechanism (WCAG 2.2.2); a 112-second video the
   visitor cannot stop is a real problem, not a theoretical one.
-- The hero background video is opt-in per visitor, not unconditional. `useBackgroundVideo`
+- On the home page the header is `position: fixed` and floats over the hero video, which starts at the very top of the page. It is transparent (a measured gradient: white nav text needs 0.65 opacity against a white video frame) until the page scrolls or the mobile menu opens, then turns solid. Header.jsx publishes its measured height as `--header-h` so the hero pads its content clear of it. Other pages keep the normal sticky header.
+- The hero video now plays at every screen size, phones included. It is withheld only under `prefers-reduced-motion` or a Save-Data / 2G / 3G connection, where a still of the building is shown instead. On mobile that is still an ~18 MB download; compressing the file is the real fix.
+- The hero background video was originally opt-in per visitor, not unconditional. `useBackgroundVideo`
   in `src/components/Hero.jsx` withholds it under `prefers-reduced-motion`, below 768px,
   and on a connection the browser reports as metered or 2G/3G (`navigator.connection`).
   When it is withheld the hero falls back to its solid teal-deep ground — the design that
@@ -219,11 +263,40 @@ respected globally.
 Per-page title, meta description, canonical, Open Graph and Twitter tags are applied by
 `src/components/SEO.jsx` from `src/data/seo.js`. Organisation JSON-LD is in `index.html`;
 Event JSON-LD is on `/news-events`. `robots.txt` and `sitemap.xml` are in `public/` — update
-the domain in both, plus `site.domain`, if the live domain differs from
-`https://www.tbwctrust.com`.
+the domain in both, plus `site.domain` and the three absolute URLs in `index.html`, if the
+live domain differs from `https://www.tbwctrust.com`.
+
+`index.html` also carries **static** title, description and Open Graph tags matching the
+home entry in `seo.js`. WhatsApp, Facebook and LinkedIn read only the raw HTML and never
+run JavaScript, so without them a shared link shows no preview. It deliberately has no
+`canonical` or `og:url`, which differ per page. A consequence: **every shared link, whatever
+the page, previews as the home page.** Per-page previews need prerendering or static site
+generation, which this build does not do. The noindex 404 page emits no canonical.
+
+The share image is the square logo, so the Twitter card is `summary`, not
+`summary_large_image`. A 1200×630 image would allow the large card.
 
 ## Contact form
 
 Submits by opening the visitor's mail client, pre-filled, addressed to the trust — no
-backend needed for launch. To route through EmailJS instead, replace `handleSubmit` in
+backend. **That is a real limitation:** it does nothing for visitors without a configured
+mail app (webmail, many phones), nothing reaches the trust unless the visitor then sends
+the email, and the site cannot confirm receipt. The form keeps the visitor's message after
+submitting, and tells them plainly to email the address directly if their mail app did not
+open. To route through EmailJS or a form service instead, replace `handleSubmit` in
 `src/components/ContactForm.jsx`; the field names map straight onto template variables.
+
+## Before launch
+
+Visible on the public pages right now and needing the trust's input:
+
+- `[Caption to be added]` on five gallery photos (`src/data/gallery.js`)
+- `[Designation to be added]` on three trustee cards (`src/data/trustees.js`)
+- **Image licensing.** `impact/professional-growth.jpg` carries a visible Shutterstock
+  watermark and ID and is a 368×280 preview-size file; `impact/education.jpg` carries a
+  baked-in "designed by freepik.com" credit. Both need a licensed or original replacement,
+  or confirmation the licence permits use.
+- **ELARA 2026.** The copy, hero button, sponsor CTA and Event structured data all treat
+  the event as upcoming, but the event date (19 July 2026) has passed and the YouTube
+  section is a highlights video.
+- `/privacy-policy` exists but was written from how the site is built, not by the trust. It states only verified facts (no cookies or tracking, the mailto form, Google Fonts, Google Maps, YouTube) and makes no legal claims. Have the trust review it, and update it whenever analytics, cookies, a form backend or a new embed are added.

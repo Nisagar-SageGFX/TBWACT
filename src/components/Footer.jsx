@@ -9,18 +9,22 @@ export default function Footer() {
     <footer className="footer">
       <div className="shell footer__grid">
         <div>
+          {/* Logo only. Not a link, and no text beside it now, so the image
+              carries the trust's name for assistive technology. */}
           <div className="footer__brand">
-            <img src="/assets/tbwact-logo.jpeg" alt="" width="56" height="56" />
-            <span>
-              <strong>{site.shortName}</strong>
-              {site.name}
-            </span>
+            <img
+              src="/assets/tbwact-logo-transparent.webp"
+              alt={site.name}
+              className="footer__logo"
+              width="96"
+              height="96"
+            />
           </div>
           <p>{site.intro}</p>
         </div>
 
         <div>
-          <h4>Pages</h4>
+          <h2 className="footer__heading">Pages</h2>
           <ul>
             <li>
               <Link to="/about">About TBWACT</Link>
@@ -47,7 +51,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4>Programmes</h4>
+          <h2 className="footer__heading">Programmes</h2>
           <ul>
             {programs.map((p) => (
               <li key={p.id}>
@@ -58,7 +62,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4>Reach us</h4>
+          <h2 className="footer__heading">Reach us</h2>
           <p>
             {site.contact.addressLines.map((line) => (
               <span key={line}>
@@ -82,7 +86,18 @@ export default function Footer() {
         <span>
           &copy; {year} {site.name}. Reg. No. {site.registrationNumber}.
         </span>
-        <span>{site.contact.website}</span>
+        <span className="footer__links">
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <a
+            href="https://sagegfx.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer__credit"
+          >
+            Developed by Sage GFX Digital Solution
+            <span className="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </span>
       </div>
     </footer>
   );

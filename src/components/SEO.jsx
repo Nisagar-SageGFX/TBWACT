@@ -35,14 +35,23 @@ export default function SEO({ meta, jsonLd }) {
     document.title = meta.title;
     setMeta('name', 'description', meta.description);
     setMeta('name', 'robots', meta.noindex ? 'noindex,follow' : 'index,follow');
-    setLink('canonical', url);
+
+    // A noindex page has no business declaring a canonical URL: the 404 page
+    // would otherwise canonicalise to /404, an address that does not exist and
+    // that contradicts its own noindex. Remove both rather than emit them.
+    if (meta.noindex) {
+      document.head.querySelector('link[rel="canonical"]')?.remove();
+      document.head.querySelector('meta[property="og:url"]')?.remove();
+    } else {
+      setLink('canonical', url);
+      setMeta('property', 'og:url', url);
+    }
 
     setMeta('property', 'og:type', 'website');
     setMeta('property', 'og:site_name', seoDefaults.siteName);
     setMeta('property', 'og:locale', seoDefaults.locale);
     setMeta('property', 'og:title', meta.title);
     setMeta('property', 'og:description', meta.description);
-    setMeta('property', 'og:url', url);
     setMeta('property', 'og:image', image);
 
     setMeta('name', 'twitter:card', seoDefaults.twitterCard);

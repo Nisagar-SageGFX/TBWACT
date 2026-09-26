@@ -66,6 +66,7 @@ export default function OurVision() {
                   <p>{pillar.description}</p>
                   <Link to={pillar.link} className="link-strong impact-card__link">
                     See the programme
+                    <span className="visually-hidden">: {pillar.title}</span>
                   </Link>
                 </div>
               </article>

@@ -10,6 +10,7 @@ import Programs from './pages/Programs';
 import NewsEvents from './pages/NewsEvents';
 import GalleryPage from './pages/GalleryPage';
 import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -18,7 +19,7 @@ export default function App() {
       <a className="skip-link" href="#main">Skip to content</a>
       <ScrollToTop />
       <Header />
-      <main id="main">
+      <main id="main" tabIndex={-1}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/news-events" element={<NewsEvents />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -1,4 +1,8 @@
 # TBWACT — Apache / Hostinger config for a single-page React build.
+#
+# DEPLOY ORDER MATTERS. Turn on SSL for the domain in Hostinger BEFORE uploading
+# this file. The HTTPS redirect below sends every visitor to https://, and if no
+# certificate is active yet the whole site becomes unreachable.
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -8,13 +12,20 @@
   RewriteCond %{HTTPS} !=on
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
-  # Serve real files and folders as-is
+  # Serve real files and folders as-is (this also serves "/" via index.html)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Everything else goes to the SPA so /about, /board-of-trustees etc. work on refresh
-  RewriteRule ^ index.html [L]
+  # Only the routes that exist get the app shell with a 200, so a hard refresh on
+  # /about still works. Anything else falls through to ErrorDocument below and is
+  # answered with a genuine 404 status. A blanket "everything -> index.html" rule
+  # makes every mistyped URL return 200, which search engines treat as a soft 404.
+  #
+  # KEEP THIS LIST IN STEP WITH src/App.jsx. If a route is added there and not
+  # here, visitors still see the page (the 404 response carries the same app
+  # shell) but search engines will not index it.
+  RewriteRule ^(about|board-of-trustees|our-vision|programs|news-events|gallery|contact|privacy-policy)/?$ index.html [L]
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -23,19 +34,39 @@
 
 <IfModule mod_expires.c>
   ExpiresActive On
+  # Hashed by the build, so safe to cache for a year.
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 6 months"
-  ExpiresByType image/webp "access plus 6 months"
-  ExpiresByType video/mp4 "access plus 6 months"
+  # NOT hashed: /assets/* keeps its filename when the trust swaps in a new photo,
+  # so a long lifetime would keep serving the old one to returning visitors.
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType video/mp4 "access plus 1 month"
   ExpiresByType application/pdf "access plus 1 month"
   ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
 <IfModule mod_headers.c>
-  Header set X-Content-Type-Options "nosniff"
-  Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set X-Frame-Options "SAMEORIGIN"
+  # "always" so these also ride on the 404 responses, which plain "set" skips.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Browsers ignore this over plain HTTP, so it only takes effect once HTTPS is
+  # live. Deliberately no includeSubDomains / preload: those are hard to undo.
+  Header always set Strict-Transport-Security "max-age=31536000"
+
+  # Built from what the site actually loads — nothing else is allowed:
+  #   fonts.googleapis.com / fonts.gstatic.com   Archivo + Source Serif 4
+  #   i.ytimg.com                                YouTube thumbnail (before click)
+  #   youtube-nocookie.com                       the video, only after a click
+  #   www.google.com                             the map on /contact
+  # 'unsafe-inline' is for style only: React writes inline style attributes.
+  # There are no inline scripts; the JSON-LD block is data and is not executed.
+  # If a new third-party embed or analytics tag is ever added, it must be added
+  # here first or the browser will silently block it.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ytimg.com; media-src 'self'; frame-src https://www.youtube-nocookie.com https://www.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
 </IfModule>
 
 ErrorDocument 404 /index.html

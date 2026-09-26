@@ -85,7 +85,10 @@ export const galleryItems = [
     webp: '/assets/tbwact-banner.webp',
     alt: 'TBWACT banner listing the registered office address and trust office bearers',
     caption: 'Trust office bearers',
-    category: 'Trust'
+    category: 'Trust',
+    // This banner is 1178x271. In the default 3/4 portrait frame it loses over 80%
+    // of its width and the thumbnail reads as gibberish, so it gets its own shape.
+    ratio: '1178 / 271'
   },
 
   // ---------------------------------------------------------------------------
@@ -104,7 +107,7 @@ export const galleryItems = [
   {
     id: 'gallery-f-1',
     src: '/assets/gallery/f-1.jpeg',
-    alt: '[Description to be added]',
+    alt: 'A row of men in garlands and formal wear standing in front of a screen showing the Builders Association of India, Tambaram Centre logo',
     caption: '[Caption to be added]',
     category: 'Trust Activities',
     ratio: '3 / 2'
@@ -112,7 +115,7 @@ export const galleryItems = [
   {
     id: 'gallery-f-2',
     src: '/assets/gallery/f-2.jpg',
-    alt: '[Description to be added]',
+    alt: 'Men in grey suits and garlands on a stage with sparklers, gathered around two men shaking hands in front of a Builders Association of India, Tambaram Centre backdrop',
     caption: '[Caption to be added]',
     category: 'Trust Activities',
     ratio: '16 / 9'
@@ -120,7 +123,7 @@ export const galleryItems = [
   {
     id: 'gallery-f-3',
     src: '/assets/gallery/f-3.jpg',
-    alt: '[Description to be added]',
+    alt: 'Men on a red-carpeted stage clapping as two men shake hands, in front of a Builders Association of India, Tambaram Centre installation banner',
     caption: '[Caption to be added]',
     category: 'Trust Activities',
     ratio: '16 / 9'
@@ -128,7 +131,7 @@ export const galleryItems = [
   {
     id: 'gallery-f-4',
     src: '/assets/gallery/f-4.jpg',
-    alt: '[Description to be added]',
+    alt: 'A large group of men in formal wear and waistcoats posing together in front of the Builders Association of India logo',
     caption: '[Caption to be added]',
     category: 'Trust Activities',
     ratio: '16 / 9'
@@ -136,7 +139,7 @@ export const galleryItems = [
   {
     id: 'gallery-f-5',
     src: '/assets/gallery/f-5.jpg',
-    alt: '[Description to be added]',
+    alt: 'Men seated around steel tables at an Executive Committee Meeting of the Builders Association of India, Tambaram Centre',
     caption: '[Caption to be added]',
     category: 'Trust Activities',
     ratio: '16 / 9'

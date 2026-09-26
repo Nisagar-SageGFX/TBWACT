@@ -4,42 +4,36 @@ import site from '../data/site';
 
 const HERO_VIDEO = '/assets/video/hero-loop.mp4';
 const HERO_POSTER = '/assets/trust-building.jpg';
+const HERO_STILL = '/assets/trust-building.webp';
 
 /**
- * Decides whether the background video is worth its cost to this visitor.
+ * Decides whether the background video should play for this visitor.
  *
- * The file is ~18 MB for 15 seconds (about 10 Mbps). Serving that to every
- * visitor is not defensible for a trust whose audience is largely on Indian
- * mobile data, so it only runs where it is cheap and wanted:
+ * It now plays at every screen size, phones included. It is still withheld in
+ * two cases, where a still frame of the building is shown instead:
  *
- *   - not under prefers-reduced-motion, which the site honours everywhere else
- *   - not on narrow screens, where it costs the most and shows the least
- *   - not on a metered or slow connection, where the browser tells us
- *
- * When it is skipped the hero falls back to its existing teal-deep ground,
- * which is exactly the design that shipped before — nothing looks broken.
+ *   - prefers-reduced-motion, which the site honours everywhere else
+ *   - a metered or slow connection the browser reports (Save-Data, 2G/3G) —
+ *     the file is ~18 MB, which is a real cost on Indian mobile data
  */
 function useBackgroundVideo() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const wide = window.matchMedia('(min-width: 768px)');
 
     const decide = () => {
       const conn = navigator.connection;
       const cheap =
         !conn || (!conn.saveData && !/(^|-)(2g|3g)$/.test(conn.effectiveType || ''));
-      setEnabled(!motion.matches && wide.matches && cheap);
+      setEnabled(!motion.matches && cheap);
     };
 
     decide();
     motion.addEventListener('change', decide);
-    wide.addEventListener('change', decide);
     navigator.connection?.addEventListener?.('change', decide);
     return () => {
       motion.removeEventListener('change', decide);
-      wide.removeEventListener('change', decide);
       navigator.connection?.removeEventListener?.('change', decide);
     };
   }, []);
@@ -82,7 +76,13 @@ export default function Hero() {
             onError={() => setBroken(true)}
           />
         </div>
-      ) : null}
+      ) : (
+        // Withheld or failed: a still of the same building, so the hero never
+        // falls back to a flat block of colour.
+        <div className="hero__bg" aria-hidden="true">
+          <img className="hero__video" src={HERO_STILL} alt="" decoding="async" />
+        </div>
+      )}
       <div className="hero__scrim" aria-hidden="true" />
 
       <div className="shell hero__grid">

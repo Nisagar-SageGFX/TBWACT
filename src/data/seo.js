@@ -1,5 +1,8 @@
 // One entry per route. The SEO team can edit titles and descriptions here
 // without touching any component.
+//
+// The `home` title and description are ALSO written out by hand in index.html,
+// for crawlers that never run JavaScript. Change them in both places.
 
 import site from './site';
 
@@ -7,7 +10,10 @@ export const seoDefaults = {
   siteName: 'TBWACT',
   domain: site.domain,
   image: '/assets/tbwact-logo.jpeg',
-  twitterCard: 'summary_large_image',
+  // 'summary', not 'summary_large_image': the share image is the square logo,
+  // and the large card would crop it top and bottom. Switch back once a
+  // 1200x630 share image exists.
+  twitterCard: 'summary',
   locale: 'en_IN'
 };
 
@@ -16,7 +22,7 @@ export const seo = {
     path: '/',
     title: 'TBWACT | Tambaram Builders Welfare and Charitable Trust',
     description:
-      'TBWACT serves society through education, healthcare, skill development and community welfare, and is building a dedicated Welfare & Service Centre in Selaiyur, Chennai.'
+      'TBWACT serves society through education, healthcare, skill development and community welfare, and is building a Welfare & Service Centre in Selaiyur, Chennai.'
   },
   about: {
     path: '/about',
@@ -60,7 +66,13 @@ export const seo = {
     path: '/contact',
     title: 'Contact Us | TBWACT',
     description:
-      'Reach Tambaram Builders Welfare and Charitable Trust at Raja Iyer Street, Selaiyur, Chennai \u2014 or enquire about sponsoring, volunteering or supporting a programme.'
+      'Reach Tambaram Builders Welfare and Charitable Trust at Raja Iyer Street, Selaiyur, Chennai, or ask about sponsoring, volunteering or supporting a programme.'
+  },
+  privacy: {
+    path: '/privacy-policy',
+    title: 'Privacy Policy | TBWACT',
+    description:
+      'What information the TBWACT website handles: no cookies or tracking, a contact form that opens your own email app, and the Google and YouTube services it loads.'
   },
   notFound: {
     path: '/404',

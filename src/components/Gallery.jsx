@@ -1,24 +1,55 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import galleryItems, { galleryCategories } from '../data/gallery';
 import Picture from './Picture';
 
 export default function Gallery({ items = galleryItems, showFilters = true }) {
   const [category, setCategory] = useState('All');
   const [active, setActive] = useState(null);
+  const dialogRef = useRef(null);
+  const triggerRef = useRef(null);
 
   const visible =
     category === 'All' ? items : items.filter((i) => i.category === category);
 
+  const open = (item, event) => {
+    // Remember the thumbnail so focus can go back to it when the dialog closes.
+    triggerRef.current = event.currentTarget;
+    setActive(item);
+  };
+
   useEffect(() => {
     if (!active) return undefined;
+    const trigger = triggerRef.current;
+
     const onKey = (e) => {
-      if (e.key === 'Escape') setActive(null);
+      if (e.key === 'Escape') {
+        setActive(null);
+        return;
+      }
+      // aria-modal only tells assistive technology that focus is contained;
+      // Tab still has to be held inside by hand, or it walks into the page
+      // behind the dialog.
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+      const focusable = dialogRef.current.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const inside = dialogRef.current.contains(document.activeElement);
+      if (!inside || (e.shiftKey && document.activeElement === first)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      if (trigger?.isConnected) trigger.focus();
     };
   }, [active]);
 
@@ -46,7 +77,7 @@ export default function Gallery({ items = galleryItems, showFilters = true }) {
             key={item.id}
             type="button"
             className="gallery-item"
-            onClick={() => setActive(item)}
+            onClick={(e) => open(item, e)}
           >
             {/* `ratio` overrides the default 3/4 thumbnail frame for images
                 whose own shape would otherwise be cropped away. */}
@@ -67,6 +98,7 @@ export default function Gallery({ items = galleryItems, showFilters = true }) {
           role="dialog"
           aria-modal="true"
           aria-label={active.caption}
+          ref={dialogRef}
           onClick={() => setActive(null)}
         >
           <button

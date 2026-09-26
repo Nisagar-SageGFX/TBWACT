@@ -71,45 +71,59 @@ export default function ContactForm() {
       `${values.subject} — website enquiry`
     )}&body=${encodeURIComponent(body)}`;
 
+    // The values are kept on purpose. This opens the visitor's mail app, which
+    // may not exist (webmail users, many phones) — clearing the form here would
+    // throw away a message they just typed with nothing to show for it.
     setSent(true);
-    setValues(emptyForm);
   };
 
   return (
     <form className="form" onSubmit={handleSubmit} noValidate>
+      <p className="form__legend">
+        Fields marked <span className="field__req">*</span> are required.
+      </p>
+
       <div className="field">
-        <label htmlFor="name">Your name</label>
+        <label htmlFor="name">
+          Your name
+          <span className="field__req" aria-hidden="true">*</span>
+        </label>
         <input
           id="name"
           name="name"
           type="text"
           autoComplete="name"
+          required
           value={values.name}
           onChange={update('name')}
           aria-invalid={Boolean(errors.name)}
           aria-describedby={errors.name ? 'name-error' : undefined}
         />
         {errors.name ? (
-          <span className="field__error" id="name-error">
+          <span className="field__error" id="name-error" role="alert">
             {errors.name}
           </span>
         ) : null}
       </div>
 
       <div className="field">
-        <label htmlFor="email">Email address</label>
+        <label htmlFor="email">
+          Email address
+          <span className="field__req" aria-hidden="true">*</span>
+        </label>
         <input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
+          required
           value={values.email}
           onChange={update('email')}
           aria-invalid={Boolean(errors.email)}
           aria-describedby={errors.email ? 'email-error' : undefined}
         />
         {errors.email ? (
-          <span className="field__error" id="email-error">
+          <span className="field__error" id="email-error" role="alert">
             {errors.email}
           </span>
         ) : null}
@@ -128,7 +142,7 @@ export default function ContactForm() {
           aria-describedby={errors.phone ? 'phone-error' : undefined}
         />
         {errors.phone ? (
-          <span className="field__error" id="phone-error">
+          <span className="field__error" id="phone-error" role="alert">
             {errors.phone}
           </span>
         ) : null}
@@ -144,17 +158,21 @@ export default function ContactForm() {
       </div> */}
 
       <div className="field">
-        <label htmlFor="message">Message</label>
+        <label htmlFor="message">
+          Message
+          <span className="field__req" aria-hidden="true">*</span>
+        </label>
         <textarea
           id="message"
           name="message"
+          required
           value={values.message}
           onChange={update('message')}
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? 'message-error' : undefined}
         />
         {errors.message ? (
-          <span className="field__error" id="message-error">
+          <span className="field__error" id="message-error" role="alert">
             {errors.message}
           </span>
         ) : null}
@@ -168,7 +186,7 @@ export default function ContactForm() {
 
       <p className="form__status" role="status" aria-live="polite">
         {sent
-          ? `Your mail app should now be open with the message ready to send to ${site.contact.email}.`
+          ? `Your mail app should open with this message ready to send. Nothing is sent until you send it there. If it did not open, your message is still here — copy it and email ${site.contact.email} directly.`
           : `Enquiries reach the trust at ${site.contact.email}. We reply on working days.`}
       </p>
     </form>
