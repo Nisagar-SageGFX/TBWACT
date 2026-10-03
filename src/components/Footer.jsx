@@ -9,16 +9,17 @@ export default function Footer() {
     <footer className="footer">
       <div className="shell footer__grid">
         <div>
-          {/* Logo only. Not a link, and no text beside it now, so the image
-              carries the trust's name for assistive technology. */}
+          {/* The visible name now sits beside the logo, so the image is
+              decorative: alt text would make a screen reader say it twice. */}
           <div className="footer__brand">
             <img
               src="/assets/tbwact-logo-transparent.webp"
-              alt={site.name}
+              alt=""
               className="footer__logo"
               width="96"
               height="96"
             />
+            <span className="footer__name">Tambaram Builders Welfare And Charitable Trust</span>
           </div>
           <p>{site.intro}</p>
         </div>

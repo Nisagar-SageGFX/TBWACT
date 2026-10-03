@@ -144,10 +144,9 @@ export default function Header() {
       className={`header${overlay ? ' header--overlay' : ''}${overlay && !scrolled && !menuOpen ? ' is-top' : ''}`}
     >
       <div className="shell header__bar">
-        <Link to='/' className="header__brand" aria-label={`${site.shortName} home`}>
-          {/* The logo is the whole brand: no text beside it. The link's
-              aria-label supplies its accessible name, so the image itself is
-              marked decorative rather than announced twice. */}
+        <Link to="/" className="header__brand">
+          {/* Visible text now names the link, so no aria-label (it would have to
+              repeat the visible words anyway). The image stays decorative. */}
           <img
             src="/assets/tbwact-logo-transparent.webp"
             alt=""
@@ -155,6 +154,7 @@ export default function Header() {
             width="60"
             height="60"
           />
+          <span className="header__name">Tambaram Builders Welfare And Charitable Trust</span>
         </Link>
 
         <nav className="nav" aria-label="Main">

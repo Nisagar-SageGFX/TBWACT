@@ -104,48 +104,48 @@ export const galleryItems = [
   // Note: f-3 is a Canva export ("Untitled design - 4"), so it is a graphic
   // rather than a photograph and may want a different caption style.
   // ---------------------------------------------------------------------------
-  {
-    id: 'gallery-f-1',
-    src: '/assets/gallery/f-1.jpeg',
-    alt: 'A row of men in garlands and formal wear standing in front of a screen showing the Builders Association of India, Tambaram Centre logo',
-    caption: '[Caption to be added]',
-    category: 'Trust Activities',
-    ratio: '3 / 2'
-  },
-  {
-    id: 'gallery-f-2',
-    src: '/assets/gallery/f-2.jpg',
-    alt: 'Men in grey suits and garlands on a stage with sparklers, gathered around two men shaking hands in front of a Builders Association of India, Tambaram Centre backdrop',
-    caption: '[Caption to be added]',
-    category: 'Trust Activities',
-    ratio: '16 / 9'
-  },
-  {
-    id: 'gallery-f-3',
-    src: '/assets/gallery/f-3.jpg',
-    alt: 'Men on a red-carpeted stage clapping as two men shake hands, in front of a Builders Association of India, Tambaram Centre installation banner',
-    caption: '[Caption to be added]',
-    category: 'Trust Activities',
-    ratio: '16 / 9'
-  },
-  {
-    id: 'gallery-f-4',
-    src: '/assets/gallery/f-4.jpg',
-    alt: 'A large group of men in formal wear and waistcoats posing together in front of the Builders Association of India logo',
-    caption: '[Caption to be added]',
-    category: 'Trust Activities',
-    ratio: '16 / 9'
-  },
-  {
-    id: 'gallery-f-5',
-    src: '/assets/gallery/f-5.jpg',
-    alt: 'Men seated around steel tables at an Executive Committee Meeting of the Builders Association of India, Tambaram Centre',
-    caption: '[Caption to be added]',
-    category: 'Trust Activities',
-    ratio: '16 / 9'
-  }
+  // {
+  //   id: 'gallery-f-1',
+  //   src: '/assets/gallery/f-1.jpeg',
+  //   alt: 'A row of men in garlands and formal wear standing in front of a screen showing the Builders Association of India, Tambaram Centre logo',
+  //   caption: '[Caption to be added]',
+  //   category: 'Trust Activities',
+  //   ratio: '3 / 2'
+  // },
+  // {
+  //   id: 'gallery-f-2',
+  //   src: '/assets/gallery/f-2.jpg',
+  //   alt: 'Men in grey suits and garlands on a stage with sparklers, gathered around two men shaking hands in front of a Builders Association of India, Tambaram Centre backdrop',
+  //   caption: '[Caption to be added]',
+  //   category: 'Trust Activities',
+  //   ratio: '16 / 9'
+  // },
+  // {
+  //   id: 'gallery-f-3',
+  //   src: '/assets/gallery/f-3.jpg',
+  //   alt: 'Men on a red-carpeted stage clapping as two men shake hands, in front of a Builders Association of India, Tambaram Centre installation banner',
+  //   caption: '[Caption to be added]',
+  //   category: 'Trust Activities',
+  //   ratio: '16 / 9'
+  // },
+  // {
+  //   id: 'gallery-f-4',
+  //   src: '/assets/gallery/f-4.jpg',
+  //   alt: 'A large group of men in formal wear and waistcoats posing together in front of the Builders Association of India logo',
+  //   caption: '[Caption to be added]',
+  //   category: 'Trust Activities',
+  //   ratio: '16 / 9'
+  // },
+  // {
+  //   id: 'gallery-f-5',
+  //   src: '/assets/gallery/f-5.jpg',
+  //   alt: 'Men seated around steel tables at an Executive Committee Meeting of the Builders Association of India, Tambaram Centre',
+  //   caption: '[Caption to be added]',
+  //   category: 'Trust Activities',
+  //   ratio: '16 / 9'
+  // }
 ];
-
+1 
 export const galleryCategories = [
   'All',
   ...Array.from(new Set(galleryItems.map((i) => i.category)))

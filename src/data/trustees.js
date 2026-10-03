@@ -27,15 +27,6 @@ export const trustees = [
     bio: ''
   },
   {
-    id: 'h-robert-livingston',
-    name: 'Thiru H. Robert Livingston',
-    designation: 'Founder Trustee & Building Committee Chairman',
-    professionalDesignation: '',
-    image: '/assets/trustees/h-robert-livingston.webp',
-    focus: '',
-    bio: ''
-  },
-  {
     id: 's-wilson-raj',
     name: 'Thiru S. Wilson Raj',
     designation: 'Secretary',
@@ -71,38 +62,47 @@ export const trustees = [
     focus: '',
     bio: ''
   },
+  {
+    id: 'h-robert-livingston',
+    name: 'Thiru H. Robert Livingston',
+    designation: 'Founder Trustee & Building Committee Chairman',
+    professionalDesignation: '',
+    image: '/assets/trustees/h-robert-livingston.webp',
+    focus: '',
+    bio: ''
+  },
 
   // These three were supplied as photographs only. The trust has not stated their
   // roles, so the designation is a visible placeholder rather than a guess — the
   // card shows it as an unfilled field. Replace the placeholder with the real
   // designation and the card needs no other change.
-  {
-    id: 'g-dineshkumar',
-    name: 'Thiru G. Dineshkumar',
-    designation: '',
-    professionalDesignation: '',
-    image: '/assets/trustees/g-dineshkumar.webp',
-    focus: '',
-    bio: ''
-  },
-  {
-    id: 'k-kandasamy',
-    name: 'Thiru K. Kandasamy',
-    designation: '',
-    professionalDesignation: '',
-    image: '/assets/trustees/k-kandasamy.webp',
-    focus: '',
-    bio: ''
-  },
-  {
-    id: 's-rajasekar',
-    name: 'Thiru S. Rajasekar',
-    designation: '',
-    professionalDesignation: '',
-    image: '/assets/trustees/s-rajasekar.webp',
-    focus: '',
-    bio: ''
-  }
+  // {
+  //   id: 'g-dineshkumar',
+  //   name: 'Thiru G. Dineshkumar',
+  //   designation: '',
+  //   professionalDesignation: '',
+  //   image: '/assets/trustees/g-dineshkumar.webp',
+  //   focus: '',
+  //   bio: ''
+  // },
+  // {
+  //   id: 'k-kandasamy',
+  //   name: 'Thiru K. Kandasamy',
+  //   designation: '',
+  //   professionalDesignation: '',
+  //   image: '/assets/trustees/k-kandasamy.webp',
+  //   focus: '',
+  //   bio: ''
+  // },
+  // {
+  //   id: 's-rajasekar',
+  //   name: 'Thiru S. Rajasekar',
+  //   designation: '',
+  //   professionalDesignation: '',
+  //   image: '/assets/trustees/s-rajasekar.webp',
+  //   focus: '',
+  //   bio: ''
+  // }
 ];
 
 // The founder profile shown on /about, as supplied by the trust.

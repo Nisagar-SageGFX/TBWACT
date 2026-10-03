@@ -323,6 +323,38 @@ main:focus { outline: none; }
 .header__logo { display: block; height: 52px; width: auto; }
 @media (min-width: 760px) { .header__logo { height: 100px; } }
 
+/* Trust name beside the badge. Two lines by design (max-width forces the wrap)
+   so it stays short enough not to widen the bar; it shrinks and tightens on
+   phones, where the burger button needs the room. min-width:0 on the flex
+   children lets the text wrap instead of pushing the burger off-screen. */
+.header__brand { gap: 0.6rem; min-width: 0; flex-shrink: 1; }
+.header__logo { flex-shrink: 0; }
+.header__name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: #fff;
+  max-width: 11.5rem;
+  text-wrap: balance;
+}
+@media (min-width: 760px) {
+  .header__brand { gap: 0.85rem; }
+  .header__name { font-size: 1rem; max-width: 13.5rem; }
+}
+/* 320px: one size down so it holds to two lines beside the burger. */
+@media (max-width: 359px) { .header__name { font-size: 0.72rem; max-width: 9.5rem; } }
+/* Nav links must never wrap. Between 1060 and 1279px the name and the nav
+   compete for the same row, so the name steps down there and the nav tightens;
+   above 1280px there is room for the full size. */
+.nav__link, .header__cta { white-space: nowrap; }
+@media (min-width: 1060px) and (max-width: 1279px) {
+  .header__name { font-size: 0.82rem; max-width: 12rem; }
+  .header__brand { gap: 0.65rem; flex-shrink: 0; }
+  .nav__link { padding-inline: 0.5rem; font-size: 0.9rem; }
+}
+
 .nav { display: none; }
 @media (min-width: 1060px) { .nav { display: flex; align-items: center; gap: 0.15rem; } }
 
@@ -1273,7 +1305,22 @@ main:focus { outline: none; }
 /* The email and the longer programme titles are the only strings that can
    outgrow a half-width cell, and they must wrap rather than overflow. */
 .footer__grid a { overflow-wrap: anywhere; }
-.footer__brand { margin-bottom: 1rem; }
+/* Phones: the footer is a two-column grid whose cells are ~130px at 320px, too
+   narrow for logo and name side by side, so the name sits under the logo. From
+   760px the cell is wide enough and they go side by side, vertically centred. */
+.footer__brand { margin-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+.footer__name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  color: #fff;
+  text-wrap: balance;
+}
+@media (min-width: 760px) {
+  .footer__brand { flex-direction: row; align-items: center; gap: 0.85rem; }
+  .footer__name { font-size: 1rem; }
+}
 /* The logo is transparent outside its circle and solid white inside it, so it
    sits straight on the dark footer. The white box the old opaque JPEG needed
    would now show square corners behind a round badge, so it is gone.
