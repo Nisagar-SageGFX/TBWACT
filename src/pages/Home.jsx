@@ -13,6 +13,7 @@ import visionPillars from '../data/vision';
 import galleryItems from '../data/gallery';
 import { upcomingEvents } from '../data/events';
 import { pillarIcons, IconCalendar, IconPin } from '../components/Icons';
+import BuildingVideo from '../components/BuildingVideo';
 
 export default function Home() {
   const event = upcomingEvents[0];
@@ -25,7 +26,7 @@ export default function Home() {
       {/* About */}
       <section className="section" aria-labelledby="about-heading">
         <div className="shell">
-          <div className="grid grid--2" style={{ alignItems: 'start', gap: '3rem' }}>
+          <div className="grid grid--2" style={{ alignItems: 'center', gap: '3rem' }}>
             <div>
               <SectionHeading
                 kicker="About the trust"
@@ -38,19 +39,12 @@ export default function Home() {
                 <Link to="/about" className="btn btn--secondary">
                   Learn more about TBWACT
                 </Link>
-                <Link to="/board-of-trustees" className="btn btn--ghost">
-                  Board of Trustees
-                </Link>
                 <Link to="/our-vision" className="btn btn--ghost">
                   Our Vision
                 </Link>
               </div>
             </div>
-            <div className="callout callout--warm">
-              <strong>Why the building matters</strong>
-              <p>{site.fundraisingNote}</p>
-              <p style={{ marginTop: '1rem', fontStyle: 'italic' }}>&ldquo;{site.quote}&rdquo;</p>
-            </div>
+            <BuildingVideo />
           </div>
         </div>
       </section>

@@ -1087,6 +1087,46 @@ main:focus { outline: none; }
 .testimonial__btn:hover { background: var(--teal-deep); }
 .testimonial__btn svg { width: 22px; height: 22px; }
 
+/* ---------- building video ---------- */
+.building-video {
+  margin: 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--teal-deep);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.75);
+}
+.building-video__player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.building-video__controls {
+  position: absolute;
+  right: clamp(0.6rem, 2vw, 1rem);
+  bottom: clamp(0.6rem, 2vw, 1rem);
+  display: flex;
+  gap: 0.4rem;
+  z-index: 2;
+}
+.building-video__btn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(1, 73, 87, 0.72);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s var(--ease);
+}
+.building-video__btn:hover { background: var(--teal-deep); }
+.building-video__btn svg { width: 22px; height: 22px; }
+
 /* ---------- gallery ---------- */
 .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
 .filter {
